@@ -56,5 +56,6 @@ module.exports.create =async function(req,res){
     
 }
 module.exports.createSession =function(req,res){
-    //TODO create user loginn session
+    //TODO create user login session
+    return res.redirect('/user/sign-up');
 }
