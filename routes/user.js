@@ -1,6 +1,6 @@
 const express = require('express');
-const passport = require('../config/passport-local-strategy');
-const router  = express.Router();
+const router = express.Router();
+const passport = require('passport');
 
 const profileController = require('../controllers/profile_controller');
 
