@@ -53,6 +53,13 @@ module.exports.create = function(req, res){
     });
 }
 
+//to signout 
+module.exports.signOut=function(req,res){
+    req.logout(function(err) {
+        if (err) { console.log(err); }
+      });
+    return res.redirect('/users/sign-in');
+}
 
 // sign in and create a session for the user
 module.exports.createSession = function(req, res){
