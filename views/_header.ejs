@@ -1,5 +1,5 @@
 <header>
-    <%if(user){%>
+    <%if(locals.user){%>
         <%=user.name%>
         <a href ='/users/sign-out'>Sign Out</a>
     <%} else{%>
