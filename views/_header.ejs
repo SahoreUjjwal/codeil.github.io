@@ -1,3 +1,9 @@
 <header>
-    Page Header
+    <%if(user){%>
+        <%=user.name%>
+        <a href ='/users/sign-out'>Sign Out</a>
+    <%} else{%>
+        <a href="/users/sign-in">Sign In</a>
+        <a href = "/users/sign-up">Sign Up</a>
+    <%}%>
 </header>
