@@ -1,9 +1,19 @@
+<link rel="stylesheet" href ="/css/header.css">
 <header>
+    <div><h4>Codeil</h4></div>
     <%if(locals.user){%>
-        <%=user.name%>
-        <a href ='/users/sign-out'>Sign Out</a>
+        <div class="sign-in">
+            <%=user.name%>
+        </div>
+        <div>
+            <a href ='/users/sign-out'>Sign Out</a>
+        </div>
     <%} else{%>
-        <a href="/users/sign-in">Sign In</a>
-        <a href = "/users/sign-up">Sign Up</a>
+        <div class="sign-in">
+            <a href="/users/sign-in">Sign In</a>
+        </div>
+        <div>
+            <a href = "/users/sign-up">Sign Up</a>
+        </div>
     <%}%>
 </header>

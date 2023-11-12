@@ -1,0 +1,14 @@
+header{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: aqua;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.sign-in{
+    position: relative;
+    left: 40%;
+}
