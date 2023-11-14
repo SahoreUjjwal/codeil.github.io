@@ -12,11 +12,13 @@ module.exports.home = async function(req, res){
             }
         })
         .exec();
+
+        const users = await User.find({});
         return res.render('home', {
             title: "Home",
-            posts:posts
+            posts:posts,
+            all_users:users
         });
-
     }
     catch(err){
         console.log("Error fetching entries form Post collection: ",err);
@@ -25,5 +27,9 @@ module.exports.home = async function(req, res){
     
     
 }
+
+module.exports.getUsers = function(req,res){
+    const users = await 
+};
 
 // module.exports.actionName = function(req, res){}

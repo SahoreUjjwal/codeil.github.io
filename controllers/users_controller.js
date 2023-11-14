@@ -1,9 +1,11 @@
 const User = require('../models/user');
 
 
-module.exports.profile = function(req, res){
+module.exports.profile = async  function(req, res){
+    const user = await User.findById({_id : req.params.id}); 
     return res.render('user_profile', {
         title: 'User Profile',
+        profile_user:user
     })
 }
 
@@ -24,7 +26,8 @@ module.exports.signUp = function(req, res){
 module.exports.signIn = function(req, res){
     if(req.isAuthenticated())
     {
-        return res.redirect('/users/profile');
+        const profile = '/users/profile/'+req.user.id;
+        return res.redirect(profile);
     }
     return res.render('user_sign_in', {
         title: "Codeial | Sign In"
@@ -53,6 +56,21 @@ module.exports.create = function(req, res){
     });
 }
 
+module.exports.update= async function(req,res){
+    try{
+        if(req.user.id == req.params.id)
+        {
+            const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body)
+           
+        }
+        return res.redirect('back');
+    }
+    catch(err){
+        console.log("Error updating profile : ", err);
+        return res.redirect('back');
+    }
+}
+
 //to signout 
 module.exports.signOut=function(req,res){
     req.logout(function(err) {
@@ -63,5 +81,6 @@ module.exports.signOut=function(req,res){
 
 // sign in and create a session for the user
 module.exports.createSession = function(req, res){
-    return res.redirect('/users/profile');
+    const profile = '/users/profile/'+req.user.id;
+    return res.redirect(profile);
 }
