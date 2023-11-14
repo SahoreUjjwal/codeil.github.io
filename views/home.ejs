@@ -1,54 +1,25 @@
-<link rel="stylesheet" href="/css/home.css">
 
-<section id = "feed-posts">
+<h1>
+    Codeial / <%= title %>
+</h1>
+
+
+<section id="feed-posts">
     <h4>Posts</h4>
-    <%if(locals.user){%>
-        <div>
-            <form action="/posts/create-post" id = "new-post-form" method = "POST">
-                <textarea name="content" cols="30" rows="5"></textarea>
-                <input type="submit" value="Post">
-            </form>
-        </div>
-    <%}%>
-
-    <% for(post of posts) {%>
-        <div class="display-post-container">
-            <div class="decoration-container">
-                <div class="post-decoration"></div>
-            </div>
-            <div class="post">
-                <div><span><%=post.user.name%></span></div>
-                <div><%=post.content%></div>
-                <% if(locals.user && (locals.user.id == post.user.id)){ %>
-                    <a href="/posts/destroy/<%= post.id%>">Delete</a>
-                <%}%>
-                <div class="comment-area">
-                    <div>
-                        <form class = "comment-form" action="/comment/create-comment" method="POST">
-                            <textarea name="content" cols="30" rows="2"></textarea>
-                            <input type="hidden" name="postId" value=<%=post.id%>>
-                            <input type="submit" value="content"> 
-                        </form>
-                    </div>
-                    <div class="post-commetn-list">
-                        <ul style="list-style-type:bullets" id ="post-comments-<%=post.id%>">
-                            <%for(comment of post.comments){%>
-                                <p>
-                                    <%=comment.content%>
-                                    <br>
-                                    <small>
-                                        <%= comment.user.name %>
-                                    </small>
-                                </p>
-                                <%}%>
-                        </ul>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
+    <% if(locals.user){ %>
+    <form action="/posts/create" id="new-post-form" method="POST">
+        <textarea name="content" cols="30" rows="3" placeholder="Type Here..." required></textarea>
+        <input type="submit" value="Post">
+    </form>
     <% } %>
+
+    <div id="posts-list-container">
+        <ul>
+            <% for(post of posts){ %>
+                
+            <%- include('_post') -%>
+                
+            <%} %>
+        </ul>
+    </div>
 </section>
-
-
