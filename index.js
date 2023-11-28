@@ -5,6 +5,8 @@ const port = 8000;
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
 const sassmiddleware = require('node-sass-middleware');
+const flash = require('connect-flash');
+const customMsg = require('./config/customMsg');
 app.use(sassmiddleware(
     {
         src:'./assets/scss',//path to pick scss file
@@ -61,6 +63,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticated);
+app.use(flash());
+app.use(customMsg.setFlash);
+
+//make path of uploads available to express
+app.use('/uploads',express.static(__dirname+'/uploads'));
+
 // use express router
 app.use('/', require('./routes'));
 

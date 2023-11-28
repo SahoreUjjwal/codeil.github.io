@@ -1,35 +1,15 @@
-.comment-section{
-    border:1px solid black;
-    border-radius: 1rem;
-}
-.feed-posts{
-    vertical-align: top;
-}
-.post{
-    margin-top: 3px;
-    display: inline-block;
-
-}
-
-.display-post-container{
+#home-container{
     display: flex;
-    flex-direction: row;
-    .decoration-container{
-        display: flex;
-        flex-direction: column;
-        margin-top: 10px;
-        height:100%;
-        vertical-align: top;
-        .post-decoration{
-            width:5px;
-            height:5px;
-            margin-left:10px;
-            margin-right: 3px;
-            border-radius: 50%;
-            background-color: black;
-        }   
-        
+    
+    #feed-posts{
+        width: 70%;
+        padding: 10px;
+    }
+
+    #user-friends{
+        width: 30%;
+        padding: 10px;
+        border-left: 1px solid lightgrey;
+        height: 100%;
     }
 }
-
-
