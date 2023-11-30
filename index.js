@@ -18,10 +18,10 @@ app.use(sassmiddleware(
 ))
 // used for session cookie
 const session = require('express-session');
-
-const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
+const passportJWT = require('./config/passport-jwt-strategy');
+const MongoStore = require('connect-mongo');
 
 app.use(express.urlencoded());
 

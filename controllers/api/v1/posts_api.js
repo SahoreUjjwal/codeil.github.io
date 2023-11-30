@@ -28,8 +28,10 @@ module.exports.index = async  function(req,res)
 module.exports.destroy =async function(req,res){
     try{
         const post = await Post.findById(req.params.id);
-        console.log(post);
+        console.log("hello",req.user);
         //mongoose gives us automatic conversion of underscoreid to a string if we use .id directly as done below
+        if(post.user == req.user.id)
+        {
           const deleted = await Post.deleteOne({_id:req.params.id});
           console.log('deleted',deleted);
           if(deleted)
@@ -40,11 +42,18 @@ module.exports.destroy =async function(req,res){
         return res.status(200).json({
                 message:"Post deleted"
             })
+        } 
+        else{
+            return res.status(401).json({
+                message:"Unauthorized, only the author can delete the post"
+            })
+        }
+        
     }
     catch(err){
         console.log('error',err);
         return res.json(500,{
-            message:"error"
+            message:"Internal server error check logs"
         });
     }
     
