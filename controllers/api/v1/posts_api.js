@@ -28,9 +28,9 @@ module.exports.index = async  function(req,res)
 module.exports.destroy =async function(req,res){
     try{
         const post = await Post.findById(req.params.id);
-        console.log("hello",req.user);
+        
         //mongoose gives us automatic conversion of underscoreid to a string if we use .id directly as done below
-        if(post.user == req.user.id)
+        if(post && post.user == req.user.id)
         {
           const deleted = await Post.deleteOne({_id:req.params.id});
           console.log('deleted',deleted);
