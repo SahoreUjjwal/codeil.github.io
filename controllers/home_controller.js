@@ -13,7 +13,7 @@ module.exports.home = async function(req, res){
             }
         })
         .exec();
-
+       // console.log("home posts",posts[0].comments);
         const users = await User.find({});
         return res.render('home', {
             title: "Home",
