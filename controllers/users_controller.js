@@ -1,6 +1,10 @@
 const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
+const ResetPassword = require('../models/resetPassword');
+const crypto = require('crypto');
+const resetMailer = require('../mailer/resetPassword_mailer');
+
 
 module.exports.profile = async  function(req, res){
     const user = await User.findById({_id : req.params.id}); 
@@ -9,6 +13,7 @@ module.exports.profile = async  function(req, res){
         profile_user:user
     })
 }
+
 
 
 // render the sign up page
@@ -33,6 +38,94 @@ module.exports.signIn = function(req, res){
         title: "Codeial | Sign In"
     })
 }
+////render forgot password page
+module.exports.forgotPassword = async  function(req, res){
+    return res.render('forgot_password', {
+        title: 'Forgot password'
+    })
+}
+
+//send mail to reset password
+
+module.exports.resetEmail = async function(req, res){
+        console.log('inreset',req.body.email);
+        const user = await User.findOne({email : req.body.email}); 
+    
+    if(user)
+    {
+        const tempToken = crypto.randomBytes(20).toString('hex')
+        const contains = await ResetPassword.findOne({user:user._id});
+       // console.log(contains);
+        let tempPassword;
+        if(contains)
+        {
+            //console.log('here1');
+             tempPassword = await ResetPassword.findOneAndUpdate({user:contains.user},{token:tempToken,isValid:true})
+        }
+        else{
+           // console.log('here2');
+             tempPassword = await ResetPassword.create({
+                user:user._id,
+                token:tempToken,
+                //isValid:true
+            });
+        }
+        if(tempPassword)
+        {
+            const link = `http://localhost:8000/users/reset-password/${tempToken}`
+            resetMailer.passwordLink(user,link);
+            return res.redirect('back');
+        }
+    }   
+}
+// reset password on link click
+module.exports.linkResetPassword = async function(req,res){
+    try{
+        let resetPasswordDocument = await ResetPassword.findOne({token:req.params.token});
+    if(resetPasswordDocument.isValid)
+        {
+            resetPasswordDocument.populate('user');
+            return res.render('reset_page', {
+                title: 'Reset password',
+                user:resetPasswordDocument.user
+            })
+        }
+        else{
+            return res.send('token_invalid')
+        }
+
+    }
+    catch(err){
+        console.log('Error generating reset Lin:', err);
+    }
+    
+    
+}
+
+//submit new password
+module.exports.newPassword = async function(req,res){
+
+    try{
+        if(req.body.password == req.body.confirm_password) 
+  {
+           // console.log("hit");
+            const user = await User.findByIdAndUpdate({_id:req.body.user_id},{password:req.body.password});
+            if(user)
+            {
+               // console.log("hit 2");
+                const updatedIsValid =  await ResetPassword.findOneAndUpdate({user:user._id},{isValid:false});
+                return res.redirect('/users/sign-in');
+             
+            }
+        }
+    }
+    catch(error){
+        console.log('Error while reset of new Password : ' ,error);
+    }
+
+   
+}
+
 
 // get the sign up data
 module.exports.create =async function(req, res){
