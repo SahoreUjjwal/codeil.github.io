@@ -1,8 +1,9 @@
-<li>
+<li id = 'comment-<%=comment.id%>'>
+    <div>
         <p>
             <% if (locals.user && locals.user.id == comment.user.id){ %>
             <small>
-                <a href="/comment/destroy/<%= comment.id %>">X</a>
+                <a id="delete-comment-button" href="/comment/destroy/<%= comment.id %>">X</a>
             </small>
             <% } %>
             <%= comment.content %>
@@ -10,6 +11,10 @@
             <small>
                 <%= comment.user.name %>
             </small>
-        </p>    
-
+        </p>
+        <p>
+            <span>likes count</span>
+            <a class ='togge-like' href="/like/toggle/?id=<%=comment._id%>&type=comment">click</a>
+        </p>
+    </div>
 </li>

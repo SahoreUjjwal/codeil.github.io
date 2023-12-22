@@ -4,6 +4,9 @@ const app = express();
 const port = 8000;
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
+
+
+
 const sassmiddleware = require('node-sass-middleware');
 const flash = require('connect-flash');
 const customMsg = require('./config/customMsg');
@@ -23,6 +26,12 @@ const passportLocal = require('./config/passport-local-strategy');
 const passportJWT = require('./config/passport-jwt-strategy');
 const passportGoogle = require('./config/passport-oauth2-strategy');
 const MongoStore = require('connect-mongo');
+
+const chatServer = require('http').Server(app);
+const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
+chatServer.listen(3001,()=>{
+    console.log('chat server listening on port 3001');
+});
 
 app.use(express.urlencoded());
 

@@ -17,26 +17,33 @@ module.exports.createComment =async function(req,res){
                 user:req.user._id,
                 post:req.body.postId
             })
-         
-            
             if(comment)
             {
                 comment = await comment.populate('user',  'name email');
                 //console.log(post);
                 post.comments.push(comment);
                 post.save();
-
+                console.log('here comment created');
                 //commentsMailer.newComment(comment);
-                let job = queue.create('emails',comment).save(function(err){
-                    if(err){
-                        console.log("Error in sending to email queue", err);
-                        reutrn;
-                    }
-                    console.log('Job enqueued' , job.id);
-                });
+              //  let job = queue.create('emails',comment).save(function(err){
+                 //   if(err){
+                 //       console.log("Error in sending to email queue", err);
+                  //  }
+                  //  console.log('Job enqueued' , job.id);
+               // });
+                if(req.xhr)
+                {
+                  return res.status(200).json({
+                      data:{
+                          comment:comment,
+                          message:"comment created"
+                      }})
+                }
+              
+
+               
                 
                // console.log('post updates');
-                res.redirect('/');
             }
         }
         
@@ -55,7 +62,15 @@ module.exports.destroy = async function(req,res){
             const deletedComment = await Comment.deleteOne({_id:req.params.commentId});
             if(deletedComment)
             {
-            const modifiedPost  = await Post.findByIdAndUpdate(comment.post,{$pull:{comments:req.params.commentId}});
+                await Post.findByIdAndUpdate(comment.post,{$pull:{comments:req.params.commentId}});
+                if(req.xhr)
+                {
+                  return res.status(200).json({
+                      data:{
+                          comment:req.params.id,
+                          message:"comment deleted"
+                      }})
+                }
             }
             return res.redirect('back');
         } 
