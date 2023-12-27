@@ -10,15 +10,25 @@ module.exports.home = async function(req, res){
             path:'comments',
             populate:{
                 path:'user'
-            }
+            },
         })
         .exec();
        // console.log("home posts",posts[0].comments);
-        const users = await User.find({});
+       if(req.user)
+       {
+            const users = await User.findById(req.user._id)
+            .populate('friends');
+            return res.render('home', {
+                title: "Home",
+                posts:posts,
+                all_friends:users.friends
+            });
+       }
+        
         return res.render('home', {
             title: "Home",
             posts:posts,
-            all_users:users
+            all_friends:[]
         });
     }
     catch(err){

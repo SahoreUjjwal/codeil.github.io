@@ -4,17 +4,55 @@ const path = require('path');
 const ResetPassword = require('../models/resetPassword');
 const crypto = require('crypto');
 const resetMailer = require('../mailer/resetPassword_mailer');
+const Friendship = require('../models/friendship');
 
 
 module.exports.profile = async  function(req, res){
     const user = await User.findById({_id : req.params.id}); 
+    let isFriend = false;
+    req.user.friends.forEach((friend)=>{
+        if(friend == user.id)
+        {
+            isFriend = true;
+        }
+    })
     return res.render('user_profile', {
         title: 'User Profile',
-        profile_user:user
+        profile_user:user,
+        is_friend:isFriend
     })
 }
 
-
+//add or remove friend
+module.exports.add_remove_friends = async function(req,res){
+    const isFriend = false;
+    req.user.friends.forEach((friend)=>{
+        if(friend== req.params.id)
+        {
+            isFriend = true;
+        }
+    })
+    if(isFriend)
+    {
+        await User.findByIdAndUpdate({_id:req.user._id},{"$pop":{"friends":req.params.id}});
+        await User.findByIdAndUpdate({_id:req.params.id},{"$pop":{"friends":req.user.id}});
+        await Friendship.findByIdAndDelete({from_user:req.user._id,to_user:req.params.id});
+        await Friendship.findByIdAndDelete({from_user:req.params.id,to_user:req.user._id});
+    }
+    else{
+        await User.findByIdAndUpdate({_id:req.user._id},{"$push":{"friends":req.params.id}});
+        await User.findByIdAndUpdate({_id:req.params.id},{"$push":{"friends":req.user.id}});
+        await Friendship.create({
+            to_user:req.params.id,
+            from_user:req.user._id
+        });
+        await Friendship.create({
+            to_user:req.user._id,
+            from_user:req.params.id
+        });
+    }
+    return res.redirect('back');  
+} 
 
 // render the sign up page
 module.exports.signUp = function(req, res){

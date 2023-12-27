@@ -1,6 +1,6 @@
 {
      let createPost= function(){
-        console.log("hello 1");
+        //console.log("hello 1");
         let newPostForm = $('#new-post-form');
 
         newPostForm.submit(function(e){

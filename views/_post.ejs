@@ -9,7 +9,7 @@
                 <%= post.content %>
                 <br>
                 <small>
-                    <%= post.user.name %>
+                    <a href="/users/profile/<%= post.user.id%>"><%= post.user.name %></a>
                 </small>
             </p>
             <p>

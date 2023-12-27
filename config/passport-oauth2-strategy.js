@@ -15,7 +15,7 @@ passport.use(new googleStrategy({
             const user =  await User.findOne({
                 email:profile.emails[0].value
             }) 
-            console.log(profile);
+            //console.log(profile);
             if(user)
             {
                 return done(null,user);
